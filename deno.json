@@ -1,6 +1,7 @@
 {
   "workspace": [
-    "./apps/api"
+    "./apps/api",
+    "./apps/desktop"
   ],
   "tasks": {
     "denoflare": "deno run -A --unstable-worker-options https://raw.githubusercontent.com/skymethod/denoflare/v0.7.0/cli/cli.ts",
@@ -13,5 +14,13 @@
     "rules": {
       "tags": ["recommended"]
     }
+  },
+  "imports": {
+    "$fresh/": "https://deno.land/x/fresh@1.7.3/",
+    "preact": "https://esm.sh/preact@10.22.0",
+    "preact/": "https://esm.sh/preact@10.22.0/",
+    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.2",
+    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.1",
+    "$std/": "https://deno.land/std@0.216.0/"
   }
 }

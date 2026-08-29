@@ -13,3 +13,5 @@ app.get("/", (c) => {
 if (import.meta.main) {
   Deno.serve({ port: 8000 }, app.fetch);
 }
+
+export default app;

@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "exports": "./main.ts",
   "tasks": {
-    "dev": "deno run --watch --allow-net main.ts",
+    "dev": "deno task --cwd ../.. denoflare serve api",
+    "deploy": "deno task --cwd ../.. denoflare push api",
     "start": "deno run --allow-net main.ts"
   },
   "imports": {

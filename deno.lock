@@ -1,5 +1,5 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@hono/hono@^4.13.3": "4.13.5",
     "jsr:@luca/esbuild-deno-loader@0.11.0": "0.11.0",
@@ -224,6 +224,10 @@
     "https://deno.land/x/fresh@1.7.3/src/server/tailwind_aot_error_page.tsx": "7265b66dc76a2e54b40774bbeb3cc7d4deb2eac537e08712e90e9c7b9399e53a",
     "https://deno.land/x/fresh@1.7.3/src/server/types.ts": "cf4943a6d3e7df100aed20f243c0464cebb6af657749f742bd2c13e78c40dff2",
     "https://deno.land/x/fresh@1.7.3/src/types.ts": "05169e3389979d8283de0ec1db3a765324ffd730b6af29ffe02752f341ae7d35",
+    "https://esm.sh/*@preact/signals-core@1.5.1": "375c3958358064bf74df7e273d76755be9330994cddc687413aacc4e7f9177b3",
+    "https://esm.sh/*@preact/signals-core@1.5.1/denonext/signals-core.mjs": "aef7e41046f10bfd789833d60bb18b07a75530d3f1f9e56de63e87fd4e88f07b",
+    "https://esm.sh/*@preact/signals@1.2.2": "325a059801c4a39c5bb1ff7441f81a7f894f5d1e63e03fa7da6f5125a8507098",
+    "https://esm.sh/*@preact/signals@1.2.2/denonext/signals.mjs": "577dda8004eaf5d783e9cd90d40694f733964630873bb00370b600b4247d0dd3",
     "https://esm.sh/*preact-render-to-string@6.3.1": "37f046906d7cc1ce35828a029a05a4eed6c8eefc4b646a301939757dfbf8ab18",
     "https://esm.sh/*preact-render-to-string@6.3.1/denonext/preact-render-to-string.mjs": "859e9f3dc137a53c17542bbed4cf8accdca81a2895d7a52d1fca38e6c5c00c90",
     "https://esm.sh/@babel/helper-validator-identifier@7.22.20": "3b0b7d94b8ac689175ecb7e72183b07c6a771cc7680a7c9916091add73bd7f88",

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/skymethod/denoflare/v0.7.0/common/config.schema.json",
+  "scripts": {
+    "api": {
+      "path": "./apps/api/main.ts",
+      "localPort": 8000
+    }
+  }
+}

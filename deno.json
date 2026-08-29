@@ -1,0 +1,23 @@
+{
+  "workspace": [
+    "./apps/api"
+  ],
+  "tasks": {
+    "test": "deno test --allow-all",
+    "test:coverage": "deno test --allow-all --coverage=coverage && deno coverage coverage --lcov > coverage.lcov",
+    "fmt": "deno fmt",
+    "lint": "deno lint"
+  },
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "singleQuote": true,
+    "proseWrap": "preserve"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
+  }
+}

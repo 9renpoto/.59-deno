@@ -1,0 +1,50 @@
+name: Verify Actions Pinning
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-pinning:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Reject unpinned actions in changed workflows
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          changed_workflows=$(git diff --name-only "$BASE_REF" "$HEAD_REF" -- '.github/workflows/*.yml' '.github/workflows/*.yaml' || true)
+          if [ -z "$changed_workflows" ]; then
+            echo "No workflow changes detected."
+            exit 0
+          fi
+
+          failed=0
+          for file in $changed_workflows; do
+            echo "Checking $file"
+            while IFS= read -r line; do
+              uses_ref=$(printf '%s' "$line" | sed -E 's/.*uses:[[:space:]]*[^@]+@([^[:space:]]+).*/\1/')
+              if ! printf '%s' "$uses_ref" | grep -Eq '^[0-9a-f]{40}$'; then
+                echo "Unpinned action detected in $file: $line"
+                failed=1
+              fi
+            done < <(grep -En '^[[:space:]]*-[[:space:]]*uses:[[:space:]]*[^[:space:]]+@[^[:space:]]+' "$file" || true)
+          done
+
+          if [ "$failed" -ne 0 ]; then
+            echo "Found unpinned GitHub Actions. Pin action references to full commit SHA."
+            exit 1
+          fi
+
+          echo "All changed workflow actions are pinned by SHA."

@@ -8,9 +8,9 @@ Deno.test("GET /health returns 200 OK", async () => {
   assertEquals(data.status, "ok");
 });
 
-Deno.test("GET / returns Hello Hono!", async () => {
+Deno.test("GET / identifies the passkey API", async () => {
   const res = await app.request("/");
   assertEquals(res.status, 200);
   const text = await res.text();
-  assertEquals(text, "Hello Hono!");
+  assertEquals(text, "Passkey API");
 });

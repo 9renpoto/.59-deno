@@ -3,6 +3,7 @@
   "specifiers": {
     "jsr:@hono/hono@^4.13.3": "4.13.5",
     "jsr:@luca/esbuild-deno-loader@0.11.0": "0.11.0",
+    "jsr:@simplewebauthn/browser@^13.2.2": "13.3.0",
     "jsr:@simplewebauthn/server@^13.2.2": "13.3.3",
     "jsr:@std/assert@^1.0.11": "1.0.19",
     "jsr:@std/bytes@^1.0.2": "1.0.6",
@@ -17,8 +18,7 @@
     "npm:@peculiar/asn1-rsa@^2.6.1": "2.9.4",
     "npm:@peculiar/asn1-schema@^2.6.0": "2.9.4",
     "npm:@peculiar/asn1-x509@^2.6.1": "2.9.4",
-    "npm:@peculiar/x509@^1.14.3": "1.14.3",
-    "npm:@simplewebauthn/browser@^13.2.2": "13.3.0"
+    "npm:@peculiar/x509@^1.14.3": "1.14.3"
   },
   "jsr": {
     "@hono/hono@4.13.5": {
@@ -31,6 +31,9 @@
         "jsr:@std/encoding",
         "jsr:@std/path"
       ]
+    },
+    "@simplewebauthn/browser@13.3.0": {
+      "integrity": "2e837b14c06346e815dafa89270360c07a41411f62fa1ff3e0535de18ec2c8a5"
     },
     "@simplewebauthn/server@13.3.3": {
       "integrity": "1cea39e044c55121729ea839c44f81d880cdd760f826815e0ef9951e6f8c22b7",
@@ -199,9 +202,6 @@
         "tslib@2.8.1",
         "tsyringe"
       ]
-    },
-    "@simplewebauthn/browser@13.3.0": {
-      "integrity": "sha512-BE/UWv6FOToAdVk0EokzkqQQDOWtNydYlY6+OrmiZ5SCNmb41VehttboTetUM3T/fr6EAFYVXjz4My2wg230rQ=="
     },
     "asn1js@3.0.10": {
       "integrity": "sha512-S2s3aOytiKdFRdulw2qPE51MzjzVOisppcVv7jVFR+Kw0kxwvFrDcYA0h7Ndqbmj0HkMIXYWaoj7fli8kgx1eg==",
@@ -510,7 +510,7 @@
       },
       "apps/desktop": {
         "dependencies": [
-          "npm:@simplewebauthn/browser@^13.2.2"
+          "jsr:@simplewebauthn/browser@^13.2.2"
         ]
       }
     }

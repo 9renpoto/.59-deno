@@ -4,7 +4,11 @@ import {
   type AuthRepository,
   MemoryAuthRepository,
 } from "./auth/repository.ts";
-import { authRoutes, type WebAuthnConfig } from "./auth/routes.ts";
+import {
+  authRoutes,
+  type WebAuthnConfig,
+  type WebAuthnDependencies,
+} from "./auth/routes.ts";
 
 interface Bindings {
   DB?: D1Database;
@@ -25,6 +29,7 @@ export function createApp(
   repository: AuthRepository,
   config: WebAuthnConfig,
   allowedOrigin = config.origin,
+  webauthn?: WebAuthnDependencies,
 ): Hono {
   const application = new Hono();
 
@@ -45,7 +50,7 @@ export function createApp(
     return context.json({ status: "ok", timestamp: new Date().toISOString() });
   });
   application.get("/", (context) => context.text("Passkey API"));
-  application.route("/auth", authRoutes(repository, config));
+  application.route("/auth", authRoutes(repository, config, webauthn));
   return application;
 }
 

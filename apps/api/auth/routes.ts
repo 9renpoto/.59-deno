@@ -24,6 +24,16 @@ export interface WebAuthnConfig {
   origin: string;
 }
 
+export interface WebAuthnDependencies {
+  verifyRegistration: typeof verifyRegistrationResponse;
+  verifyAuthentication: typeof verifyAuthenticationResponse;
+}
+
+const defaultWebAuthnDependencies: WebAuthnDependencies = {
+  verifyRegistration: verifyRegistrationResponse,
+  verifyAuthentication: verifyAuthenticationResponse,
+};
+
 interface RegistrationBody {
   ceremonyId: string;
   response: RegistrationResponseJSON;
@@ -37,6 +47,7 @@ interface AuthenticationBody {
 export function authRoutes(
   repository: AuthRepository,
   config: WebAuthnConfig,
+  webauthn = defaultWebAuthnDependencies,
 ): Hono {
   const routes = new Hono();
 
@@ -98,7 +109,7 @@ export function authRoutes(
     }
 
     try {
-      const verification = await verifyRegistrationResponse({
+      const verification = await webauthn.verifyRegistration({
         response: body.response,
         expectedChallenge: ceremony.challenge,
         expectedOrigin: config.origin,
@@ -179,7 +190,7 @@ export function authRoutes(
     }
 
     try {
-      const verification = await verifyAuthenticationResponse({
+      const verification = await webauthn.verifyAuthentication({
         response: body.response,
         expectedChallenge: ceremony.challenge,
         expectedOrigin: config.origin,

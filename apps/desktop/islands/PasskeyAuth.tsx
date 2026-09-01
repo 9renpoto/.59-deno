@@ -3,6 +3,7 @@ import {
   startRegistration,
 } from "@simplewebauthn/browser";
 import { useEffect, useState } from "preact/hooks";
+import { Button } from "../components/Button.tsx";
 
 interface PublicUser {
   id: string;
@@ -88,33 +89,44 @@ export default function PasskeyAuth() {
 
   if (user) {
     return (
-      <section class="auth-card signed-in" aria-live="polite">
-        <div class="success-mark" aria-hidden="true">✓</div>
+      <section
+        class="auth-card"
+        data-state="signed-in"
+        aria-live="polite"
+      >
+        <div class="success-badge" aria-hidden="true">✓</div>
         <p class="eyebrow">SIGNED IN</p>
-        <h2>{user.displayName}</h2>
-        <p class="muted">@{user.username}</p>
-        <button
-          class="secondary-button"
+        <h2 class="title">{user.displayName}</h2>
+        <p class="muted-text">@{user.username}</p>
+        <Button
+          variant="secondary"
           type="button"
           disabled={busy}
+          data-state={busy ? "busy" : "idle"}
           onClick={logout}
         >
           ログアウト
-        </button>
-        {status && <p class="status">{status}</p>}
+        </Button>
+        {status && (
+          <p class="status-message" role="status">
+            {status}
+          </p>
+        )}
       </section>
     );
   }
 
   return (
-    <div class="auth-grid">
-      <section class="auth-card">
+    <div class="auth-layout">
+      <section class="auth-card" data-variant="register">
         <p class="eyebrow">NEW ACCOUNT</p>
-        <h2>パスキーを登録</h2>
-        <p class="muted">パスワードは必要ありません。</p>
-        <form onSubmit={register}>
-          <label>
-            表示名<input
+        <h2 class="title">パスキーを登録</h2>
+        <p class="muted-text">パスワードは必要ありません。</p>
+        <form class="auth-form" onSubmit={register}>
+          <label class="field">
+            表示名
+            <input
+              class="input-control"
               value={displayName}
               onInput={(event) => setDisplayName(event.currentTarget.value)}
               autocomplete="name"
@@ -122,8 +134,10 @@ export default function PasskeyAuth() {
               required
             />
           </label>
-          <label>
-            ユーザー名<input
+          <label class="field">
+            ユーザー名
+            <input
+              class="input-control"
               value={username}
               onInput={(event) => setUsername(event.currentTarget.value)}
               autocomplete="username"
@@ -133,26 +147,37 @@ export default function PasskeyAuth() {
               required
             />
           </label>
-          <button class="primary-button" disabled={busy} type="submit">
+          <Button
+            class="submit-button"
+            variant="primary"
+            disabled={busy}
+            data-state={busy ? "busy" : "idle"}
+            type="submit"
+          >
             {busy ? "処理中…" : "パスキーを作成"}
-          </button>
+          </Button>
         </form>
       </section>
-      <section class="auth-card login-card">
+      <section class="auth-card" data-variant="login">
         <p class="eyebrow">WELCOME BACK</p>
-        <h2>パスキーでログイン</h2>
-        <p class="muted">端末の生体認証またはPINを使います。</p>
-        <button
-          class="primary-button"
+        <h2 class="title">パスキーでログイン</h2>
+        <p class="muted-text">端末の生体認証またはPINを使います。</p>
+        <Button
+          variant="primary"
           disabled={busy}
+          data-state={busy ? "busy" : "idle"}
           type="button"
           onClick={login}
         >
           {busy ? "処理中…" : "ログイン"}
-        </button>
-        <p class="privacy-note">ユーザー名の入力も不要です</p>
+        </Button>
+        <p class="note">ユーザー名の入力も不要です</p>
       </section>
-      {status && <p class="status global-status" role="status">{status}</p>}
+      {status && (
+        <p class="status-message" data-variant="global" role="status">
+          {status}
+        </p>
+      )}
     </div>
   );
 }

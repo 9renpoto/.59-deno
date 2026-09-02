@@ -21,6 +21,7 @@
   --color-neutral-600: #6d7771;
   --color-neutral-500: #869089;
   --color-neutral-400: #8b948e;
+  --color-neutral-350: #9ba59e;
   --color-neutral-300: #cfd8d1;
   --color-neutral-200: #e1e7e3;
   --color-neutral-100: #fbfcfb;
@@ -99,7 +100,7 @@
   );
   --color-text-caption: light-dark(
     var(--color-neutral-500),
-    var(--color-neutral-400)
+    var(--color-neutral-350)
   );
   --color-text-eyebrow: light-dark(
     var(--color-forest-600),
@@ -287,9 +288,8 @@ input {
   }
 
   :scope:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-action-primary-bg) 35%,
-      transparent);
+    outline: 3px solid var(--color-border-focus);
+    outline-offset: 2px;
   }
 
   :scope:disabled {

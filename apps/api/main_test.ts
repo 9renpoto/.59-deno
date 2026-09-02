@@ -8,11 +8,14 @@ Deno.test("GET /health returns 200 OK", async () => {
   assertEquals(data.status, "ok");
 });
 
-Deno.test("GET / identifies the passkey API", async () => {
-  const res = await app.request("/");
-  assertEquals(res.status, 200);
-  const text = await res.text();
-  assertEquals(text, "Passkey API");
+Deno.test("GET / identifies the passkey API with localization", async () => {
+  const resJa = await app.request("/");
+  assertEquals(resJa.status, 200);
+  assertEquals(await resJa.text(), "Passkey API");
+
+  const resEn = await app.request("/?lang=en");
+  assertEquals(resEn.status, 200);
+  assertEquals(await resEn.text(), "Passkey API");
 });
 
 Deno.test("worker fetch applies environment configuration", async () => {

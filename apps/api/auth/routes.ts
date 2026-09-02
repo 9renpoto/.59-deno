@@ -8,6 +8,7 @@ import {
   verifyRegistrationResponse,
 } from "@simplewebauthn/server";
 import { Hono } from "hono";
+import { getTranslator, type Locale, type Translator } from "../i18n.ts";
 import type { AuthRepository } from "./repository.ts";
 import {
   clearSessionCookie,
@@ -17,6 +18,13 @@ import {
 } from "./session.ts";
 
 const CEREMONY_LIFETIME_MS = 5 * 60 * 1000;
+
+export interface AppEnv {
+  Variables: {
+    locale: Locale;
+    t: Translator;
+  };
+}
 
 export interface WebAuthnConfig {
   rpName: string;
@@ -48,21 +56,32 @@ export function authRoutes(
   repository: AuthRepository,
   config: WebAuthnConfig,
   webauthn = defaultWebAuthnDependencies,
-): Hono {
-  const routes = new Hono();
+): Hono<AppEnv> {
+  const routes = new Hono<AppEnv>();
+
+  routes.use("*", async (context, next) => {
+    const { locale, t } = getTranslator(
+      context.req.header("accept-language"),
+      context.req.query("lang"),
+    );
+    context.set("locale", locale);
+    context.set("t", t);
+    await next();
+  });
 
   routes.post("/register/options", async (context) => {
+    const t = context.get("t");
     const body = await readJson(context);
     const username = normalizeUsername(body?.username);
     const displayName = normalizeDisplayName(body?.displayName);
     if (!username || !displayName) {
       return context.json(
-        { error: "ユーザー名と表示名を入力してください" },
+        { error: t("invalidInput") },
         400,
       );
     }
     if (await repository.findUserByUsername(username)) {
-      return context.json({ error: "このユーザー名は使用されています" }, 409);
+      return context.json({ error: t("usernameTaken") }, 409);
     }
 
     const userId = crypto.randomUUID();
@@ -93,19 +112,20 @@ export function authRoutes(
   });
 
   routes.post("/register/verify", async (context) => {
+    const t = context.get("t");
     const body = await readJson(context) as RegistrationBody | null;
     if (!body?.ceremonyId || !body.response) {
-      return context.json({ error: "登録レスポンスが不正です" }, 400);
+      return context.json({ error: t("invalidRegistrationResponse") }, 400);
     }
     const ceremony = await repository.consumeCeremony(
       body.ceremonyId,
       "registration",
     );
     if (!ceremony?.userId || !ceremony.username || !ceremony.displayName) {
-      return context.json({ error: "登録操作の有効期限が切れています" }, 400);
+      return context.json({ error: t("registrationExpired") }, 400);
     }
     if (await repository.findUserByUsername(ceremony.username)) {
-      return context.json({ error: "このユーザー名は使用されています" }, 409);
+      return context.json({ error: t("usernameTaken") }, 409);
     }
 
     try {
@@ -117,7 +137,7 @@ export function authRoutes(
         requireUserVerification: true,
       });
       if (!verification.verified || !verification.registrationInfo) {
-        return context.json({ error: "パスキーを検証できませんでした" }, 400);
+        return context.json({ error: t("passkeyVerificationFailed") }, 400);
       }
 
       const now = Date.now();
@@ -147,7 +167,7 @@ export function authRoutes(
       context.header("Set-Cookie", session.cookie);
       return context.json({ verified: true });
     } catch (error) {
-      return context.json({ error: safeVerificationError(error) }, 400);
+      return context.json({ error: safeVerificationError(error, t) }, 400);
     }
   });
 
@@ -170,9 +190,10 @@ export function authRoutes(
   });
 
   routes.post("/login/verify", async (context) => {
+    const t = context.get("t");
     const body = await readJson(context) as AuthenticationBody | null;
     if (!body?.ceremonyId || !body.response?.id) {
-      return context.json({ error: "認証レスポンスが不正です" }, 400);
+      return context.json({ error: t("invalidAuthenticationResponse") }, 400);
     }
     const ceremony = await repository.consumeCeremony(
       body.ceremonyId,
@@ -180,13 +201,13 @@ export function authRoutes(
     );
     if (!ceremony) {
       return context.json(
-        { error: "ログイン操作の有効期限が切れています" },
+        { error: t("loginExpired") },
         400,
       );
     }
     const passkey = await repository.findPasskey(body.response.id);
     if (!passkey) {
-      return context.json({ error: "パスキーを確認できません" }, 400);
+      return context.json({ error: t("passkeyNotFound") }, 400);
     }
 
     try {
@@ -204,7 +225,7 @@ export function authRoutes(
         },
       });
       if (!verification.verified) {
-        return context.json({ error: "パスキーを検証できませんでした" }, 400);
+        return context.json({ error: t("passkeyVerificationFailed") }, 400);
       }
       await repository.updatePasskeyCounter(
         passkey.id,
@@ -218,15 +239,16 @@ export function authRoutes(
       context.header("Set-Cookie", session.cookie);
       return context.json({ verified: true });
     } catch (error) {
-      return context.json({ error: safeVerificationError(error) }, 400);
+      return context.json({ error: safeVerificationError(error, t) }, 400);
     }
   });
 
   routes.get("/me", async (context) => {
+    const t = context.get("t");
     const user = await currentUser(context, repository);
     return user
       ? context.json({ user: publicUser(user) })
-      : context.json({ error: "ログインが必要です" }, 401);
+      : context.json({ error: t("unauthorized") }, 401);
   });
 
   routes.post("/logout", async (context) => {
@@ -275,7 +297,7 @@ function publicUser(
   };
 }
 
-function safeVerificationError(error: unknown): string {
+function safeVerificationError(error: unknown, t: Translator): string {
   console.error("WebAuthn verification failed", error);
-  return "パスキーを検証できませんでした。もう一度お試しください";
+  return t("passkeyVerificationError");
 }

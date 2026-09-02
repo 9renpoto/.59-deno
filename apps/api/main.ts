@@ -5,10 +5,12 @@ import {
   MemoryAuthRepository,
 } from "./auth/repository.ts";
 import {
+  type AppEnv,
   authRoutes,
   type WebAuthnConfig,
   type WebAuthnDependencies,
 } from "./auth/routes.ts";
+import { getTranslator } from "./i18n.ts";
 
 interface Bindings {
   DB?: D1Database;
@@ -30,8 +32,8 @@ export function createApp(
   config: WebAuthnConfig,
   allowedOrigin = config.origin,
   webauthn?: WebAuthnDependencies,
-): Hono {
-  const application = new Hono();
+): Hono<AppEnv> {
+  const application = new Hono<AppEnv>();
 
   application.use("*", async (context, next) => {
     const origin = context.req.header("origin");
@@ -43,13 +45,24 @@ export function createApp(
     context.header("Access-Control-Allow-Headers", "Content-Type");
     context.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     if (context.req.method === "OPTIONS") return context.body(null, 204);
+
+    const { locale, t } = getTranslator(
+      context.req.header("accept-language"),
+      context.req.query("lang"),
+    );
+    context.set("locale", locale);
+    context.set("t", t);
+
     await next();
   });
 
   application.get("/health", (context) => {
     return context.json({ status: "ok", timestamp: new Date().toISOString() });
   });
-  application.get("/", (context) => context.text("Passkey API"));
+  application.get("/", (context) => {
+    const t = context.get("t");
+    return context.text(t("apiTitle"));
+  });
   application.route("/auth", authRoutes(repository, config, webauthn));
   return application;
 }

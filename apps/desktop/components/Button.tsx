@@ -1,7 +1,8 @@
 import { JSX } from "preact";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
-export interface ButtonProps extends JSX.HTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends Omit<JSX.HTMLAttributes<HTMLButtonElement>, "size"> {
   variant?: "primary" | "secondary";
   size?: "small" | "medium";
 }

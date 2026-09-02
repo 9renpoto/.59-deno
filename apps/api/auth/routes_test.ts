@@ -32,15 +32,48 @@ Deno.test("registration options create a one-time ceremony", async () => {
   assertEquals(repository.ceremonies.size, 1);
 });
 
-Deno.test("registration rejects invalid and duplicate usernames", async () => {
+Deno.test("registration rejects invalid and duplicate usernames with localized errors", async () => {
   const repository = new MemoryAuthRepository();
   const app = createApp(repository, config);
-  const invalid = await app.request("/auth/register/options", {
+
+  // Default Japanese error
+  const invalidJa = await app.request("/auth/register/options", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ username: "x", displayName: "Alice" }),
   });
-  assertEquals(invalid.status, 400);
+  assertEquals(invalidJa.status, 400);
+  assertEquals(
+    (await invalidJa.json()).error,
+    "ユーザー名と表示名を入力してください",
+  );
+
+  // English error via Accept-Language
+  const invalidEn = await app.request("/auth/register/options", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "accept-language": "en-US,en;q=0.9",
+    },
+    body: JSON.stringify({ username: "x", displayName: "Alice" }),
+  });
+  assertEquals(invalidEn.status, 400);
+  assertEquals(
+    (await invalidEn.json()).error,
+    "Please enter a username and display name",
+  );
+
+  // English error via query param
+  const invalidQueryEn = await app.request("/auth/register/options?lang=en", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ username: "x", displayName: "Alice" }),
+  });
+  assertEquals(invalidQueryEn.status, 400);
+  assertEquals(
+    (await invalidQueryEn.json()).error,
+    "Please enter a username and display name",
+  );
 
   await repository.createUser({
     id: crypto.randomUUID(),
@@ -48,12 +81,20 @@ Deno.test("registration rejects invalid and duplicate usernames", async () => {
     displayName: "Alice",
     createdAt: Date.now(),
   });
-  const duplicate = await app.request("/auth/register/options", {
+
+  const duplicateEn = await app.request("/auth/register/options", {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+      "accept-language": "en",
+    },
     body: JSON.stringify({ username: "ALICE", displayName: "Other Alice" }),
   });
-  assertEquals(duplicate.status, 409);
+  assertEquals(duplicateEn.status, 409);
+  assertEquals(
+    (await duplicateEn.json()).error,
+    "This username is already taken",
+  );
 });
 
 Deno.test("authentication options support username-less login", async () => {
@@ -69,10 +110,17 @@ Deno.test("authentication options support username-less login", async () => {
   assertEquals(body.options.userVerification, "required");
 });
 
-Deno.test("me requires a valid session", async () => {
+Deno.test("me requires a valid session and returns localized error", async () => {
   const app = createApp(new MemoryAuthRepository(), config);
-  const response = await app.request("/auth/me");
-  assertEquals(response.status, 401);
+  const responseJa = await app.request("/auth/me");
+  assertEquals(responseJa.status, 401);
+  assertEquals((await responseJa.json()).error, "ログインが必要です");
+
+  const responseEn = await app.request("/auth/me", {
+    headers: { "accept-language": "en" },
+  });
+  assertEquals(responseEn.status, 401);
+  assertEquals((await responseEn.json()).error, "Login required");
 });
 
 Deno.test("registration verification creates user, passkey, and session", async () => {

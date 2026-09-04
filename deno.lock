@@ -181,6 +181,7 @@
     "https://deno.land/std@0.216.0/path/windows/to_namespaced_path.ts": "4ffa4fb6fae321448d5fe810b3ca741d84df4d7897e61ee29be961a6aac89a4c",
     "https://deno.land/std@0.216.0/regexp/escape.ts": "57303d6c9c6aa058d9a79a3c70113c545391639a87e9a18428220c1bad407549",
     "https://deno.land/std@0.216.0/testing/snapshot.ts": "35ca1c8e8bfb98d7b7e794f1b7be8d992483fcff572540e41396f22a5bddb944",
+    "https://deno.land/std@0.216.0/testing/types.ts": "36e519e8735884ce60ddd284195a28f6d22f83d3effe5df0ce27bafc17b5655d",
     "https://deno.land/x/denoflate@1.2.1/mod.ts": "f5628e44b80b3d80ed525afa2ba0f12408e3849db817d47a883b801f9ce69dd6",
     "https://deno.land/x/denoflate@1.2.1/pkg/denoflate.js": "b9f9ad9457d3f12f28b1fb35c555f57443427f74decb403113d67364e4f2caf4",
     "https://deno.land/x/denoflate@1.2.1/pkg/denoflate_bg.wasm.js": "d581956245407a2115a3d7e8d85a9641c032940a8e810acbd59ca86afd34d44d",
@@ -241,12 +242,8 @@
     "https://esm.sh/preact@10.22.0/hooks": "8a1ea3148ef7373b9c3dc027a147ff6728a4e53e10e3506c1191b087f0e564e1"
   },
   "workspace": {
-    "members": {
-      "apps/api": {
-        "dependencies": [
-          "jsr:@hono/hono@^4.13.3"
-        ]
-      }
-    }
+    "dependencies": [
+      "jsr:@hono/hono@^4.13.3"
+    ]
   }
 }

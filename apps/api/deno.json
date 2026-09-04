@@ -1,5 +1,5 @@
 {
-  "name": "@template/api",
+  "name": "@myapp/api",
   "version": "0.1.0",
   "exports": "./main.ts",
   "tasks": {
@@ -8,7 +8,6 @@
     "start": "deno run --allow-net main.ts"
   },
   "imports": {
-    "hono": "jsr:@hono/hono@^4.13.3",
     "@simplewebauthn/server": "jsr:@simplewebauthn/server@^13.2.2"
   }
 }

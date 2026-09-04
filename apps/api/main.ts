@@ -32,7 +32,7 @@ export function createApp(
   config: WebAuthnConfig,
   allowedOrigin = config.origin,
   webauthn?: WebAuthnDependencies,
-): Hono<AppEnv> {
+) {
   const application = new Hono<AppEnv>();
 
   application.use("*", async (context, next) => {
@@ -56,18 +56,20 @@ export function createApp(
     await next();
   });
 
-  application.get("/health", (context) => {
+  // Chain routes to preserve their schemas for the RPC client.
+  return application.get("/health", (context) => {
     return context.json({ status: "ok", timestamp: new Date().toISOString() });
-  });
-  application.get("/", (context) => {
-    const t = context.get("t");
-    return context.text(t("apiTitle"));
-  });
-  application.route("/auth", authRoutes(repository, config, webauthn));
-  return application;
+  })
+    .get("/", (context) => {
+      const t = context.get("t");
+      return context.text(t("apiTitle"));
+    })
+    .route("/auth", authRoutes(repository, config, webauthn));
 }
 
 export const app = createApp(localRepository, localConfig);
+
+export type AppType = typeof app;
 
 const worker = {
   async fetch(request: Request, env: Bindings): Promise<Response> {

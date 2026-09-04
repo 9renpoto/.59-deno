@@ -1,5 +1,5 @@
 {
-  "name": "@template/desktop",
+  "name": "@myapp/desktop",
   "version": "0.1.0",
   "exports": "./main.ts",
   "tasks": {

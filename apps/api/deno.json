@@ -6,5 +6,8 @@
     "dev": "deno task --cwd ../.. denoflare serve api",
     "deploy": "deno task --cwd ../.. denoflare push api",
     "start": "deno run --allow-net main.ts"
+  },
+  "imports": {
+    "@simplewebauthn/server": "jsr:@simplewebauthn/server@^13.2.2"
   }
 }

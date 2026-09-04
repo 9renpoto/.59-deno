@@ -21,5 +21,17 @@ Deno.test("RPC client preserves the health response type and payload", async () 
 Deno.test("RPC client can call the root route", async () => {
   const response = await client.index.$get();
   assertEquals(response.status, 200);
-  assertEquals(await response.text(), "Hello Hono!");
+  assertEquals(await response.text(), "Passkey API");
+});
+
+Deno.test("RPC client preserves auth error responses and localization", async () => {
+  const response = await client.auth.me.$get({}, {
+    headers: { "Accept-Language": "en" },
+  });
+  assertEquals(response.status, 401);
+  if (response.status === 401) {
+    const data = await response.json();
+    assertType<IsExact<typeof data, { error: string }>>(true);
+    assertEquals(data.error, "Login required");
+  }
 });

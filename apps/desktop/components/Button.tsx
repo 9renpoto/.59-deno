@@ -1,12 +1,26 @@
 import { JSX } from "preact";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
-export function Button(props: JSX.HTMLAttributes<HTMLButtonElement>) {
+export interface ButtonProps
+  extends Omit<JSX.HTMLAttributes<HTMLButtonElement>, "size"> {
+  variant?: "primary" | "secondary";
+  size?: "small" | "medium";
+}
+
+export function Button({
+  variant = "primary",
+  size = "medium",
+  disabled,
+  class: className,
+  ...props
+}: ButtonProps) {
   return (
     <button
       {...props}
-      disabled={!IS_BROWSER || props.disabled}
-      class="px-2 py-1 border-gray-500 border-2 rounded bg-white hover:bg-gray-200 transition-colors"
+      disabled={!IS_BROWSER || disabled}
+      class={`button-control${className ? ` ${className}` : ""}`}
+      data-variant={variant}
+      data-size={size}
     />
   );
 }

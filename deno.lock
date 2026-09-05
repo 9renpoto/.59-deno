@@ -4,7 +4,7 @@
     "jsr:@hono/hono@^4.13.3": "4.13.5",
     "jsr:@luca/esbuild-deno-loader@0.11.0": "0.11.0",
     "jsr:@simplewebauthn/browser@^13.2.2": "13.3.0",
-    "jsr:@simplewebauthn/server@^13.2.2": "13.3.3",
+    "jsr:@simplewebauthn/server@^13.3.3": "13.3.3",
     "jsr:@std/assert@^1.0.11": "1.0.19",
     "jsr:@std/bytes@^1.0.2": "1.0.6",
     "jsr:@std/encoding@^1.0.5": "1.0.11",
@@ -512,6 +512,7 @@
     "https://deno.land/std@0.216.0/semver/try_parse_range.ts": "239e0d711c5745da8c4dcda3c0797b4b5a83bfe494a51d3a0f005472cdc7b016",
     "https://deno.land/std@0.216.0/semver/types.ts": "8ed52c8cfc59e249a0dbab597d8c31bcf10405dcbe9714585055ea02252ae0d0",
     "https://deno.land/std@0.216.0/testing/snapshot.ts": "35ca1c8e8bfb98d7b7e794f1b7be8d992483fcff572540e41396f22a5bddb944",
+    "https://deno.land/std@0.216.0/testing/types.ts": "36e519e8735884ce60ddd284195a28f6d22f83d3effe5df0ce27bafc17b5655d",
     "https://deno.land/x/code_block_writer@12.0.0/mod.ts": "2c3448060e47c9d08604c8f40dee34343f553f33edcdfebbf648442be33205e5",
     "https://deno.land/x/code_block_writer@12.0.0/utils/string_utils.ts": "60cb4ec8bd335bf241ef785ccec51e809d576ff8e8d29da43d2273b69ce2a6ff",
     "https://deno.land/x/denoflate@1.2.1/mod.ts": "f5628e44b80b3d80ed525afa2ba0f12408e3849db817d47a883b801f9ce69dd6",
@@ -595,14 +596,16 @@
     "https://esm.sh/preact@10.22.0/denonext/jsx-runtime.mjs": "135034958157406811f9d44d7f07595da1da9f8ec9dc6adf316e3f3815661e7e",
     "https://esm.sh/preact@10.22.0/denonext/preact.mjs": "8d07e2251111a69a3d7caf057173bbb806ac7d79954397ce5377309067f50097",
     "https://esm.sh/preact@10.22.0/hooks": "8a1ea3148ef7373b9c3dc027a147ff6728a4e53e10e3506c1191b087f0e564e1",
-    "https://esm.sh/preact@10.22.0/jsx-runtime": "6c6117abd414386ed23785f7c198e03bee696c1fa0fee01b72a64abe5e7ae7fb",
-    "https://deno.land/std@0.216.0/testing/types.ts": "36e519e8735884ce60ddd284195a28f6d22f83d3effe5df0ce27bafc17b5655d"
+    "https://esm.sh/preact@10.22.0/jsx-runtime": "6c6117abd414386ed23785f7c198e03bee696c1fa0fee01b72a64abe5e7ae7fb"
   },
   "workspace": {
+    "dependencies": [
+      "jsr:@hono/hono@^4.13.3"
+    ],
     "members": {
       "apps/api": {
         "dependencies": [
-          "jsr:@simplewebauthn/server@^13.2.2"
+          "jsr:@simplewebauthn/server@^13.3.3"
         ]
       },
       "apps/desktop": {
@@ -610,9 +613,6 @@
           "jsr:@simplewebauthn/browser@^13.2.2"
         ]
       }
-    },
-    "dependencies": [
-      "jsr:@hono/hono@^4.13.3"
-    ]
+    }
   }
 }

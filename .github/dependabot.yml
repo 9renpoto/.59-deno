@@ -8,6 +8,22 @@ updates:
       default-days: 7
     labels:
       - "Type: Maintenance"
+    groups:
+      fresh-preact:
+        patterns:
+          - "*fresh*"
+          - "preact"
+          - "*preact*"
+      hono:
+        patterns:
+          - "*hono*"
+      simplewebauthn:
+        patterns:
+          - "@simplewebauthn/*"
+      deno-std:
+        patterns:
+          - "$std/*"
+          - "@std/*"
   - package-ecosystem: docker
     directory: "/.devcontainer"
     schedule:
@@ -24,3 +40,7 @@ updates:
       default-days: 7
     labels:
       - "Type: Maintenance"
+    groups:
+      actions-org:
+        patterns:
+          - "actions/*"

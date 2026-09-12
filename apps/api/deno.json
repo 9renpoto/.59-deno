@@ -8,6 +8,6 @@
     "start": "deno run --allow-net main.ts"
   },
   "imports": {
-    "@simplewebauthn/server": "jsr:@simplewebauthn/server@^13.3.3"
+    "@simplewebauthn/server": "jsr:@simplewebauthn/server@^14.0.1"
   }
 }

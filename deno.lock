@@ -1,7 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@hono/hono@^4.13.5": "4.13.7",
+    "jsr:@hono/hono@^4.13.7": "4.13.7",
     "jsr:@luca/esbuild-deno-loader@0.11.0": "0.11.0",
     "jsr:@simplewebauthn/browser@^13.3.0": "13.3.0",
     "jsr:@simplewebauthn/server@^13.3.3": "13.3.3",
@@ -600,7 +600,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@hono/hono@^4.13.5"
+      "jsr:@hono/hono@^4.13.7"
     ],
     "members": {
       "apps/api": {

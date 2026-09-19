@@ -1,6 +1,6 @@
 import {
   type AuthenticationResponseJSON,
-  type AuthenticatorTransportFuture,
+  type AuthenticatorTransport,
   generateAuthenticationOptions,
   generateRegistrationOptions,
   type RegistrationResponseJSON,
@@ -218,7 +218,7 @@ export function authRoutes(
             id: passkey.id,
             publicKey: new Uint8Array(passkey.publicKey),
             counter: passkey.counter,
-            transports: passkey.transports as AuthenticatorTransportFuture[],
+            transports: passkey.transports as AuthenticatorTransport[],
           },
         });
         if (!verification.verified) {

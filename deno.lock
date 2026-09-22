@@ -3,7 +3,6 @@
   "specifiers": {
     "jsr:@hono/hono@^4.13.7": "4.13.7",
     "jsr:@luca/esbuild-deno-loader@0.11.0": "0.11.0",
-    "jsr:@simplewebauthn/browser@14": "14.0.0",
     "jsr:@simplewebauthn/server@^14.0.1": "14.0.2",
     "jsr:@std/assert@^1.0.11": "1.0.19",
     "jsr:@std/bytes@^1.0.2": "1.0.6",
@@ -33,9 +32,6 @@
         "jsr:@std/encoding",
         "jsr:@std/path"
       ]
-    },
-    "@simplewebauthn/browser@14.0.0": {
-      "integrity": "e4d38047e60bd2881599460fef4c6e1182b01b77f34117c876ad49f7a4ec9e4f"
     },
     "@simplewebauthn/server@14.0.2": {
       "integrity": "ce24daad52718fb7aff2c74eb4e1a419ae782dd130bfb9dfefda01cac3766dd1",
@@ -630,11 +626,6 @@
       "apps/api": {
         "dependencies": [
           "jsr:@simplewebauthn/server@^14.0.1"
-        ]
-      },
-      "apps/desktop": {
-        "dependencies": [
-          "jsr:@simplewebauthn/browser@14"
         ]
       }
     }

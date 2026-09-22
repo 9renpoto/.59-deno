@@ -1,40 +1,43 @@
-# Fresh project
+# Desktop Application Template
 
-Your new Fresh project is ready to go. You can follow the Fresh "Getting
-Started" guide here: https://fresh.deno.dev/docs/getting-started
+Desktop application template built with [Tauri v2](https://tauri.app/) and
+[Leptos](https://leptos.dev/).
 
-### Usage
+## Structure
 
-Make sure to install Deno: https://deno.land/manual/getting_started/installation
+- `src-tauri/`: Rust backend for native window management and desktop IPC
+  commands.
+- `src-frontend/`: Rust frontend using Leptos compiled to WASM for client-side
+  rendering.
 
-Then start the project:
+## Prerequisites
 
+- [Rust](https://www.rust-lang.org/) (edition 2021 or later)
+- `wasm32-unknown-unknown` target: `rustup target add wasm32-unknown-unknown`
+- [Trunk](https://trunkrs.dev/) for bundling WASM: `cargo install trunk`
+- [Tauri CLI](https://tauri.app/v1/guides/getting-started/prerequisites):
+  `cargo install cargo-tauri`
+
+## Development
+
+Run `cargo check` or tests across the workspace:
+
+```sh
+cd apps/desktop
+cargo check --workspace
+cargo test --workspace
 ```
-deno task start
+
+Or via Deno tasks from the workspace root:
+
+```sh
+deno task --cwd apps/desktop check
+deno task --cwd apps/desktop test
 ```
 
-This will watch the project directory and restart as necessary.
+To launch the desktop application in dev mode:
 
-### Typed API client
-
-Use the Hono RPC client from Fresh server handlers:
-
-```ts
-import { createApiClient } from "../lib/api.ts";
-
-const api = createApiClient("http://localhost:8000");
-const response = await api.health.$get();
-const health = await response.json();
-console.log(health.status, health.timestamp);
+```sh
+cd apps/desktop
+cargo tauri dev
 ```
-
-Pass the API base URL for your environment. Browser calls across origins require
-CORS configuration on the API; server handlers can call it directly.
-
-Route and response types are inferred from `AppType` in `@myapp/api`, imported
-as a type so server code is not bundled into the client. Add API routes to the
-method chain in `apps/api/main.ts` to preserve inference. Hono dependencies are
-defined in the root `deno.json` to keep the server and client versions aligned.
-
-Run `deno task test` from the workspace root to check types and test the client
-against the API in memory.

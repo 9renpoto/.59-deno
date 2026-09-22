@@ -1,3 +1,9 @@
+target/
+**/target/
+gen/
+**/gen/
+dist/
+**/dist/
 coverage/
 coverage.lcov
 junit.xml

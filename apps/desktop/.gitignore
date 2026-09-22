@@ -1,11 +1,14 @@
+# Rust / Cargo build outputs
+target/
+**/target/
+gen/
+**/gen/
+
+# Trunk / Web build outputs
+dist/
+**/dist/
+
 # dotenv environment variable files
 .env
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
 .env.local
-
-# Fresh build directory
-_fresh/
-# npm dependencies
-node_modules/
